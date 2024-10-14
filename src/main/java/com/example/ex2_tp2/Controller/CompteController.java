@@ -56,7 +56,7 @@ public class CompteController {
                     @ApiResponse(responseCode = "500", description = "erreur serveur")
             }
     )
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Compte> add(@RequestBody Compte compte) {
         Compte compte1 = compteService.CreateCompte(compte);
         return ResponseEntity.ok(compte1);
@@ -75,7 +75,7 @@ public class CompteController {
                     @ApiResponse(responseCode = "400", description = "Paramètre d'entrée non valide")
             }
     )
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<Compte>> GetALL() {
         List<Compte> compteList = compteService.GetAllCompte();
         return ResponseEntity.ok(compteList);
@@ -98,7 +98,7 @@ public class CompteController {
                     @ApiResponse(responseCode = "404", description = "compte pas trouvé")
             }
     )
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+
     public ResponseEntity<Compte> GetbyId(@PathVariable Long id) {
         Compte compte = compteService.GetCompteById(id);
         return compte == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(compte);
@@ -112,7 +112,7 @@ public class CompteController {
                     @ApiResponse(responseCode = "404", description = "compte pas trouvé")
             }
     )
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> Delete(@PathVariable Long id) {
         compteService.DeleteCompte(id);
         return ResponseEntity.ok().build();
@@ -133,21 +133,19 @@ public class CompteController {
                     @ApiResponse(responseCode = "404", description = "compte pas trouvé")
             }
     )
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Compte> Update(@PathVariable Long id, @RequestBody Compte c) {
         Compte compte = compteService.UpdateCompte(id, c);
         return ResponseEntity.ok(compte);
     }
 
     @GetMapping("/crediter/{id}/{m}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Compte> crediter(@PathVariable Long id, @PathVariable float m) {
         Compte compte = compteService.Crediter(id, m);
         return ResponseEntity.ok(compte);
     }
 
     @GetMapping("/debiter/{id}/{m}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Compte> debiter(@PathVariable Long id, @PathVariable float m) {
         Compte compte = compteService.Debiter(id, m);
         return ResponseEntity.ok(compte);
